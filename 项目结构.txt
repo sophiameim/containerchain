@@ -1,0 +1,40 @@
+vicgateway/
+│
+├── spiders/             # 存放爬虫代码
+│   ├── gateway.py       # 维州检查船期爬虫 
+│
+├── models/              # 数据模型
+│   └── ...
+│
+├── middlewares/         # 中间件
+│   ├── 
+│   └── ...
+│
+├── pipelines/           # 数据处理管道
+│   ├── 
+│   ├── 
+│   ├── 
+│   └── ...
+│
+├── utils/               # 工具函数和类
+│   ├── google_sheet_utils.py #用于存放使用google的各种方法
+│   └── ...
+│
+├── tools/               # 第三方工具和驱动程序
+│   └── googlesheetapi.json #通信文件
+│
+├── config/              # 配置文件夹
+│   ├── google_sheet_config.py
+│   ├── gateway_config.py
+│
+├── logs/                # 存放日志文件
+│   ├── regocheck_log.txt
+│   ├── gateway_log.txt
+├── main.py              # 这个可以启动gateway.py
+├── settings.py          # 项目设置，如爬虫速度、并发数等
+├── requirements.txt     # 项目依赖
+├── 项目结构.txt          # 项目结构说明
+├── .idea/               # PyCharm IDE创建（无需关注）
+└── venv/                # 虚拟环境文件夹（无需关注）
+└── Dockerfile
+               

@@ -1,0 +1,9 @@
+Dockerfile
+项目结构.txt
+常用命令.txt
+run_spider.py
+*.pyc
+*.pyo
+*.pyd
+__pycache__
+.pytest_cache

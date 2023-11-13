@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "vic-depot",
+  "private_key_id": "95801651e707b979748099e6d51c6a60450fa2bc",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCq1KlTf7umDaII\nwxgMPEQxOLlECQgAN1/SLraqy0fNiKzGb7XtVe6pTs20ZNIhB210J35KUVVZEX5k\nk2D6Ct1aVehUqQrBqzDgXYU4eKHsTYCVgS2qMA8MtD9ZBOMgIDV5m0QJdNJNVMHT\nSI74+C0b0in8MAm7cQg4q8Pmt9weOE5Cvu2qtv8AcNAyyxp3iDxnLBr4sONtarTN\norD6fO8/9nOwQRMHOcaOhGfjOT+YcHh0xl+fSuABkSu5fBVtq3E278fuhpPpQQnT\n2tbepkYR3NeV32L9FKcQcR7KOJO8llfZc0qKhyZ2xuYwM1NkO3M2GFhCnnwyxyKl\nSO4RjTKDAgMBAAECggEADoQts1O6XVzxNO9nHrsMTGZ2j8p4rJQIB3NCwHavrk57\n6AzcF8PimO6CWl7q4DWiXmlwuN36c6wh4mgHqJe9wYxlRrRqnpRufdJUnLzbfZoE\nYC/u8nRNAxZZ/7WDm1pBUQkZmfgcWsfmBI843v0v0BpmyPBIE26CdVZbOkLLaKHa\nsbot+gUBXeTstud1TPe22RMy2lIM6xnSZ/USCXfpEHQGZ810mzRGkJOtTqQeEkuY\nzj5an2fQntoG2P+uDm0GA3jQyStnIhbJLEw09r/TpJKzYVdX9dSh2GrT/jSXdiSy\noEBdlBYEZOunpJq27THQP6w71bjxyJOUoGYGBHFU4QKBgQDTD1/7D7aM+p6awKOA\n1D2rkg5ojwXcYYbXQH575x/4T6rwkNpbD3m1Tfb56uD9dTDlbiiFtwV4BpSdv4k/\ncaaYTnbobgaNnozPatvoI7AKrRnKvwoQdBBsEQHtyrZA9GW41YHIAbIryosVMVE5\nIupATaYpbDUawxRkecr8IaLT8QKBgQDPNG8YqJA3yPHx+L5GvJLKiHAfSfQ+qWQY\nTz7elWlCfpwxoMOCwGjIiU9Uw7yq1eXuPDV2WZwl5IYnJKEZ1FgfWvz5tG+lUjNd\nnk1X3OV7Oc+xltuDqvXPqJGC3ezNZJF86K8vT2+BCtXJK0XIzXzlD39OgxSXSapS\nPHh0pqARswKBgF2fUVUd2D1bIqXE1AJeo2iK5mdNIi1q+ZRcIH83u/+63znNF38T\nM0rQZcDghqMHrAPpxIHj+MIQMTZ0cx44fMzM6YQa4j9J2G5dmWS1B+8EcA92hLFd\nurclKDTiGcxgXQsLcoFU90LjmqRw9vWgXkbd6tovDLNtW4tiVz9WcFMRAoGBAIHD\ncav8rMzy4GrMf8VnBXsndShzNS4lAVWkE1hsM8574i/GYYq6GyUzsOYB618FtAi9\n1jF3Ly4f7tAGxYmajVGdtv5evOjJEPgZUpCq+2BvtR2fv3u3DlhtViuh9lIvIFoc\nktHLKqai9X4Vxo9Z+VSunui5eKTCcpMr4bgUPfy3AoGAewmblRb+rGx+/QMcUS2C\nwgb3SagGkndho5bn+hqDintd227/ZdBjyce5rXjeXbDmXO/Fx2Bs378/4LNMgX9P\nJucb6ijKVBJEBOeIfOnlkINhfX13ecvigj9HWAHqKj4r8c+olQd3MvhkA6hLV1Mc\nktF+zjbJ1DdShIZ9y583xCE=\n-----END PRIVATE KEY-----\n",
+  "client_email": "vicdepotapi@vic-depot.iam.gserviceaccount.com",
+  "client_id": "101175974113323573693",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/vicdepotapi%40vic-depot.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
