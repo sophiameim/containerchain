@@ -12,9 +12,9 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException
+
 # 设置登录网页
 URL = containerchain_config.CONTAINERCHAINURL
-EMPTYDEPOTCHECKURL = containerchain_config.EMPTYDEPOTINQUIRY
 
 def __init__(self,  wait_time=10):
     self.config = containerchain_config
