@@ -193,13 +193,6 @@ class ContainerchainScraper:
         print(f"Ready Date: {ready_date}")
         time.sleep(1)
 
-        # 现在获取页面上的 Release Details 下的 release number
-        release_number_element = self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".container-release")))
-        release_number = release_number_element.text.strip()  # 删除可能的前后空白字符
-        # 检查 release number 是否与提供的 booking_ref 匹配
-        if release_number != booking_ref:
-            print(f"Release number {release_number} does not match booking_ref {booking_ref}. Skipping fill.")
-            return None  # 不匹配则返回 None，这样就不会继续填充数据
         
         return {
             'booking_ref': booking_ref,
