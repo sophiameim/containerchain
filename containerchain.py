@@ -165,6 +165,7 @@ class ContainerchainScraper:
 
         
         try:
+            time.sleep(3)
             self.empty_park_selector = "h4.recent-title.p-none.m-none"
             empty_park_element = self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, self.empty_park_selector)))
             empty_park = empty_park_element.text if empty_park_element else "Not Found"
