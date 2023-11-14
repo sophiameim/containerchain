@@ -137,8 +137,6 @@ class ContainerchainScraper:
         except NoSuchElementException:
             print("没有找到关闭按钮，继续执行后续操作")
 
-
-
     
     def navigate_to_inquiry(self):
         inquiry_link_text = 'Inquiry'
@@ -148,51 +146,65 @@ class ContainerchainScraper:
         self.wait.until(EC.element_to_be_clickable((By.LINK_TEXT, empty_depot_inquiry_text))).click()
 
     def navigate_and_filter(self, booking_ref):
-        select_element = self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "select[ng-model='searchType']")))
+        self.select_search_type_selector = "select[ng-model='searchType']"
+        select_element = self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, self.select_search_type_selector)))
         select = Select(select_element)
         select.select_by_value("ReleaseInformation")
-        input_element = self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "input[ng-model='searchValue']")))
+
+        self.input_search_value_selector = "input[ng-model='searchValue']"
+        input_element = self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, self.input_search_value_selector)))
         input_element.clear()
         input_element.send_keys(booking_ref)
-        search_button = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button[ng-click='doSearch()']")))
+
+        self.search_button_selector = "button[ng-click='doSearch()']"
+        search_button = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, self.search_button_selector)))
         search_button.click()
 
         loading_mask = "div.loading-outer-container"  # 这是阻挡点击的元素的CSS选择器
         self.wait.until(EC.invisibility_of_element_located((By.CSS_SELECTOR, loading_mask)))
 
         
+        try:
+            self.empty_park_selector = "h4.recent-title.p-none.m-none"
+            empty_park_element = self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, self.empty_park_selector)))
+            empty_park = empty_park_element.text if empty_park_element else "Not Found"
+            print(f"Empty Park : {empty_park}")
+            
+            self.qty_on_release_selector = ".col-xs-12.col-sm-1.text-right strong"
+            qty_on_release_element = self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, self.qty_on_release_selector)))
+            qty_on_release = qty_on_release_element.text if qty_on_release_element else "Not Found"
+            print(f"Qty On Release: {qty_on_release}")
+            
+            self.expiry_date_selector = ".col-xs-12.col-sm-2.text-center strong"
+            expiry_date_element = self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, self.expiry_date_selector)))
+            expiry_date = expiry_date_element.text if expiry_date_element else "Not Found"
+            print(f"Expiry Date: {expiry_date}")
+            
+            self.ready_date_selector = "table tbody tr td:nth-of-type(6)"
+            ready_date_element = self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, self.ready_date_selector)))
+            ready_date = ready_date_element.text if ready_date_element else "Not Found"
+            print(f"Ready Date: {ready_date}")
 
-        # 检查是否存在错误消息
-        error_message_elements = self.browser.find_elements(By.CSS_SELECTOR, ".alert.alert-danger")
-        for element in error_message_elements:
-            if "Release not found or you may not have access to the Port of Operation" in element.text:
-                print(f"跳过 booking_ref {booking_ref}.")
+            # 检查是否存在错误消息  
+            self.error_message_selector = ".alert.alert-danger"
+            error_message_elements = self.browser.find_elements(By.CSS_SELECTOR, self.error_message_selector)
+            for element in error_message_elements:
+                if "Release not found or you may not have access to the Port of Operation" in element.text:
+                    print(f"跳过 booking_ref {booking_ref}.")
+                    return None
+            
+            # 现在获取页面上的 Release Details 下的 release number
+            container_release_selector = ".container-release"
+            release_number_element = self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, container_release_selector)))
+            page_release_number = release_number_element.text.strip() if release_number_element else "Not Found"
+            # 检查页面上的 Release Number 是否与输入的 Release Number 匹配
+            if page_release_number != booking_ref:
+                print(f"页面上的 Release Number {page_release_number} 与输入的 {booking_ref} 不匹配。")
                 return None
-            
-        # 获取页面上显示的 Release Number
-        container_release_selector = ".container-release"
-        release_number_element = self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, container_release_selector)))
-        page_release_number = release_number_element.text.strip() if release_number_element else "Not Found"
-        # 检查页面上的 Release Number 是否与输入的 Release Number 匹配
-        if page_release_number != booking_ref:
-            print(f"页面上的 Release Number {page_release_number} 与输入的 {booking_ref} 不匹配。")
+        except Exception as e:
+            # 捕获任何异常，打印错误并跳过当前的 booking_ref
+            print(f"处理 booking_ref {booking_ref} 时发生错误: {e}")
             return None
-            
-    
-        empty_park_element = self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "h4.recent-title.p-none.m-none")))
-        empty_park = empty_park_element.text if empty_park_element else "Not Found"
-        print(f"Empty Park : {empty_park}")
-        qty_on_release_element = self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".col-xs-12.col-sm-1.text-right strong")))
-        qty_on_release = qty_on_release_element.text if qty_on_release_element else "Not Found"
-        print(f"Qty On Release: {qty_on_release}")
-        expiry_date_element = self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".col-xs-12.col-sm-2.text-center strong")))
-        expiry_date = expiry_date_element.text if expiry_date_element else "Not Found"
-        print(f"Expiry Date: {expiry_date}")
-        ready_date_element = self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "table tbody tr td:nth-of-type(6)")))
-        ready_date = ready_date_element.text if ready_date_element else "Not Found"
-        print(f"Ready Date: {ready_date}")
-        time.sleep(1)
-
         
         return {
             'booking_ref': booking_ref,
