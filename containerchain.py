@@ -11,7 +11,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import TimeoutException
 from collections import defaultdict
 
 # 设置登录网页
@@ -137,7 +137,7 @@ class ContainerchainScraper:
             close_button_selector = ".modal-header .close"
             WebDriverWait(self.browser, self.wait_time).until(EC.element_to_be_clickable((By.CSS_SELECTOR, close_button_selector))).click()
             print("关闭按钮被点击")
-        except NoSuchElementException:
+        except TimeoutException:
             print("没有找到关闭按钮，继续执行后续操作")
 
 
