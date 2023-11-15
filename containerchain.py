@@ -12,6 +12,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException
+from collections import defaultdict
 
 # 设置登录网页
 URL = containerchain_config.CONTAINERCHAINURL
@@ -60,7 +61,9 @@ def filter_data(all_data, headers):
     export_check_col_index = headers.index("Export Check")
     export_check = [row[export_check_col_index] for row in all_data[1:]]
     # 创建 booking_ref 到 ID 的映射，确保一个 booking_ref 可以对应多个 ID
-    booking_ref_to_id = {booking_refs[i]: [all_id_numbers[i]] for i in range(len(all_id_numbers))}
+    booking_ref_to_id = defaultdict(list)
+    for i in range(len(all_id_numbers)):
+        booking_ref_to_id[booking_refs[i]].append(all_id_numbers[i])
     
 
     # 当前日期时间
@@ -137,6 +140,8 @@ class ContainerchainScraper:
         except NoSuchElementException:
             print("没有找到关闭按钮，继续执行后续操作")
 
+
+
     
     def navigate_to_inquiry(self):
         inquiry_link_text = 'Inquiry'
@@ -163,49 +168,47 @@ class ContainerchainScraper:
         loading_mask = "div.loading-outer-container"  # 这是阻挡点击的元素的CSS选择器
         self.wait.until(EC.invisibility_of_element_located((By.CSS_SELECTOR, loading_mask)))
 
-        
-        try:
-            time.sleep(3)
-            self.empty_park_selector = "h4.recent-title.p-none.m-none"
-            empty_park_element = self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, self.empty_park_selector)))
-            empty_park = empty_park_element.text if empty_park_element else "Not Found"
-            print(f"Empty Park : {empty_park}")
-            
-            self.qty_on_release_selector = ".col-xs-12.col-sm-1.text-right strong"
-            qty_on_release_element = self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, self.qty_on_release_selector)))
-            qty_on_release = qty_on_release_element.text if qty_on_release_element else "Not Found"
-            print(f"Qty On Release: {qty_on_release}")
-            
-            self.expiry_date_selector = ".col-xs-12.col-sm-2.text-center strong"
-            expiry_date_element = self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, self.expiry_date_selector)))
-            expiry_date = expiry_date_element.text if expiry_date_element else "Not Found"
-            print(f"Expiry Date: {expiry_date}")
-            
-            self.ready_date_selector = "table tbody tr td:nth-of-type(6)"
-            ready_date_element = self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, self.ready_date_selector)))
-            ready_date = ready_date_element.text if ready_date_element else "Not Found"
-            print(f"Ready Date: {ready_date}")
 
-            # 检查是否存在错误消息  
-            self.error_message_selector = ".alert.alert-danger"
-            error_message_elements = self.browser.find_elements(By.CSS_SELECTOR, self.error_message_selector)
-            for element in error_message_elements:
-                if "Release not found or you may not have access to the Port of Operation" in element.text:
-                    print(f"跳过 booking_ref {booking_ref}.")
-                    return None
-            
-            # 现在获取页面上的 Release Details 下的 release number
-            container_release_selector = ".container-release"
-            release_number_element = self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, container_release_selector)))
-            page_release_number = release_number_element.text.strip() if release_number_element else "Not Found"
-            # 检查页面上的 Release Number 是否与输入的 Release Number 匹配
-            if page_release_number != booking_ref:
-                print(f"页面上的 Release Number {page_release_number} 与输入的 {booking_ref} 不匹配。")
+        # 检查是否存在错误消息
+        self.error_message_selector = ".alert.alert-danger"
+        error_message_elements = self.browser.find_elements(By.CSS_SELECTOR, self.error_message_selector)
+        for element in error_message_elements:
+            if "Release not found or you may not have access to the Port of Operation" in element.text:
+                print(f"跳过 booking_ref {booking_ref}.")
                 return None
-        except Exception as e:
-            # 捕获任何异常，打印错误并跳过当前的 booking_ref
-            print(f"处理 booking_ref {booking_ref} 时发生错误: {e}")
+            
+        # 获取页面上显示的 Release Number
+        container_release_selector = ".container-release"
+        release_number_element = self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, container_release_selector)))
+        page_release_number = release_number_element.text.strip() if release_number_element else "Not Found"
+        # 检查页面上的 Release Number 是否与输入的 Release Number 匹配
+        if page_release_number != booking_ref:
+            print(f"页面上的 Release Number {page_release_number} 与输入的 {booking_ref} 不匹配。")
             return None
+            
+    
+        self.empty_park_selector = "h4.recent-title.p-none.m-none"
+        empty_park_element = self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, self.empty_park_selector)))
+        empty_park = empty_park_element.text if empty_park_element else "Not Found"
+        print(f"Empty Park : {empty_park}")
+
+        self.qty_on_release_selector = ".col-xs-12.col-sm-1.text-right strong"
+        qty_on_release_element = self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, self.qty_on_release_selector)))
+        qty_on_release = qty_on_release_element.text if qty_on_release_element else "Not Found"
+        print(f"Qty On Release: {qty_on_release}")
+
+        self.expiry_date_selector = ".col-xs-12.col-sm-2.text-center strong"
+        expiry_date_element = self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, self.expiry_date_selector)))
+        expiry_date = expiry_date_element.text if expiry_date_element else "Not Found"
+        print(f"Expiry Date: {expiry_date}")
+
+        self.ready_date_selector = "table tbody tr td:nth-of-type(6)"
+        ready_date_element = self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, self.ready_date_selector)))
+        ready_date = ready_date_element.text if ready_date_element else "Not Found"
+        print(f"Ready Date: {ready_date}")
+        time.sleep(1)
+
+        
         
         return {
             'booking_ref': booking_ref,
@@ -231,23 +234,22 @@ class ContainerchainScraper:
 
 def write_data_to_google_sheet(WORKSHEET, all_data, old_data, headers, fetched_data, all_id_numbers, booking_ref_to_id):
     for data in fetched_data:
-        if data is None:  # 检查是否为 None
-            continue  # 如果是 None，就跳过当前迭代
+        if data is None:
+            continue
         booking_ref = data['booking_ref']
         ids = booking_ref_to_id.get(booking_ref, [])
         for id in ids:
-            row_number = all_id_numbers.index(id) + 1
-            # 在这里根据 row_number 更新 all_data 中的对应行
-            all_data[row_number][headers.index("Empty Park")] = data["Empty Park"]
-            all_data[row_number][headers.index("Qty On Release")] = data["Qty On Release"]
-            all_data[row_number][headers.index("Ready Date")] = data["Ready Date"]
-            all_data[row_number][headers.index("Expiry Date")] = data["Expiry Date"]
-        else:
-            print(f"找不到 booking_ref 对应的 ID: {booking_ref}")
-
+            if id in all_id_numbers:
+                row_number = all_id_numbers.index(id) + 1  # +1 因为 all_data 的索引从 0 开始，但 Google Sheets 行号从 1 开始
+                # 更新 all_data 中的对应行
+                all_data[row_number][headers.index("Empty Park")] = data["Empty Park"]
+                all_data[row_number][headers.index("Qty On Release")] = data["Qty On Release"]
+                all_data[row_number][headers.index("Ready Date")] = data["Ready Date"]
+                all_data[row_number][headers.index("Expiry Date")] = data["Expiry Date"]
+            else:
+                print(f"找不到 booking_ref 对应的 ID: {id}")
     # 更新工作表数据
     google_sheet_utils.update_changed_data(WORKSHEET, old_data, all_data)
-
 
 def main():
     WORKSHEET, all_data, old_data, headers = initialize_communication_and_data()
